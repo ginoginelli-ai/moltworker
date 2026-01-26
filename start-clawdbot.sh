@@ -106,6 +106,10 @@ echo "Gateway will be available on port 18789"
 # Start the gateway (blocking)
 # Use provided token or a fixed sandbox token
 # Set CLAWDBOT_GATEWAY_TOKEN via wrangler secret for production
-GATEWAY_TOKEN="${CLAWDBOT_GATEWAY_TOKEN:-clawdbot-sandbox-token}"
-echo "Gateway token: $GATEWAY_TOKEN"
+if [ -n "$CLAWDBOT_GATEWAY_TOKEN" ]; then
+    GATEWAY_TOKEN="$CLAWDBOT_GATEWAY_TOKEN"
+else
+    GATEWAY_TOKEN="clawdbot-sandbox-token"
+    echo "Gateway token (default): $GATEWAY_TOKEN"
+fi
 exec clawdbot gateway --port 18789 --verbose --allow-unconfigured --bind lan --token "$GATEWAY_TOKEN"
