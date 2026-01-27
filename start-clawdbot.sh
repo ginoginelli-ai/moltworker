@@ -30,13 +30,17 @@ mkdir -p "$CONFIG_DIR"
 # ============================================================
 # RESTORE FROM R2 BACKUP
 # ============================================================
-# If R2 is mounted and has a backup, restore it
-if [ -d "$BACKUP_DIR" ] && [ -f "$BACKUP_DIR/clawdbot.json" ]; then
-    echo "Found R2 backup, restoring..."
+# Check if R2 backup exists by looking for clawdbot.json
+# The BACKUP_DIR may exist but be empty if R2 was just mounted
+if [ -f "$BACKUP_DIR/clawdbot.json" ]; then
+    echo "Found R2 backup at $BACKUP_DIR, restoring..."
+    # Copy all files from backup to config dir, preserving attributes
     cp -a "$BACKUP_DIR/." "$CONFIG_DIR/" 2>/dev/null || true
     echo "Restored config from R2 backup"
+elif [ -d "$BACKUP_DIR" ]; then
+    echo "R2 mounted at $BACKUP_DIR but no backup data found yet"
 else
-    echo "No R2 backup found, starting fresh"
+    echo "R2 not mounted, starting fresh"
 fi
 
 # If config file still doesn't exist, create from template
