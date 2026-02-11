@@ -8,6 +8,8 @@ import type { MoltbotEnv } from '../types';
  */
 export function buildEnvVars(env: MoltbotEnv): Record<string, string> {
   const envVars: Record<string, string> = {};
+  if (env.OPENAI_BASE_URL) envVars.OPENAI_BASE_URL = env.OPENAI_BASE_URL;
+  if (env.OPENAI_MODEL) envVars.OPENAI_MODEL = env.OPENAI_MODEL;
 
   // Cloudflare AI Gateway configuration (new native provider)
   if (env.CLOUDFLARE_AI_GATEWAY_API_KEY) {
